@@ -24,9 +24,14 @@ var buildMap = function() {
       .append('path')
       .attr('class', 'country')
       .attr('d', geoPath)
-      .style('fill', 'lightgrey')
-      .style('stroke', 'black')
-      ;
+      .style('fill', function (d) {
+        if (d.properties['STATE'] === "12") {
+          return 'lightgrey';
+        } else {
+          return 'grey';
+        }
+      })
+      .style('stroke', 'black');
 };
 
 d3.json('USCounty.json', function(error, jsonData) {
