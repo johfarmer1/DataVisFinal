@@ -17,9 +17,9 @@ var svg = d3.select("#mapDiv").append("svg")
         .style('position', 'fixed');
 
 var buildMap = function() {
-  country = svg.selectAll('.country')
+  county = svg.selectAll('.county')
       .data(geoData.features);
-  country
+  county
       .enter()
       .append('path')
       .attr('class', 'country')
@@ -32,6 +32,8 @@ var buildMap = function() {
         }
       })
       .style('stroke', 'black');
+    county.append('svg:title')
+          .text(function(d) { return d.properties["NAME"]});
 };
 
 d3.json('USCounty.json', function(error, jsonData) {
