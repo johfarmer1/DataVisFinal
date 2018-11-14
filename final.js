@@ -13,7 +13,7 @@ var geoPath = d3.geo.path()
 var svg = d3.select("#mapDiv").append("svg")
         .attr("width", width)
         .attr("height", height)
-        .attr("transform", "translate(-650,-500)scale(4)")
+        .attr("transform", "translate(-50,875)scale(8)")
         .style('position', 'fixed');
 
 var buildMap = function() {
@@ -24,8 +24,9 @@ var buildMap = function() {
       .append('path')
       .attr('class', 'country')
       .attr('d', geoPath)
+      .style('stroke-width', '.3px')
       .style('fill', function (d) {
-        if (d.properties['STATE'] === "12") {
+        if (d.properties['STATE'] === "19") {
           return 'lightgrey';
         } else {
           return 'grey';
