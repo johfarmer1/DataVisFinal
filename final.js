@@ -43,6 +43,7 @@ var buildMap = function() {
       .attr('class', 'country')
       .attr('d', geoPath)
       .style('stroke-width', '.3px')
+      .style('stroke', 'black')
       .style('fill', function (d) {
         if (d.properties['STATE'] !== "19") {
           return 'grey';
@@ -53,8 +54,7 @@ var buildMap = function() {
           return districtColorMap[district]
         }
       })
-      .style('stroke', 'black');
-    county.append('svg:title')
+    .append('svg:title')
           .text(function(d) { return d.properties["NAME"]});
 };
 
