@@ -1,6 +1,7 @@
 var width = 1000;
 var height = 600;
 var votingMap;
+var selectedDistrict = '0';
 
 var projection = d3.geo.albers()
   .scale(1000)
@@ -27,12 +28,23 @@ var svg = d3.select("#mapDiv").append("svg")
   .attr("height", height)
   .attr("transform", "translate(-50,875)scale(8)")
   .style('position', 'fixed');
+
 var districtColorMap = {
   '1': "red",
   '2': "green",
   '3': "purple",
   '4': "yellow"
-}
+};
+
+var clicked = function(d) {
+  if (selectedDistrict !== "0") {
+    county = d.properties["NAME"]
+    entryDict = votingMap.get(county)
+    entryDict['District'] = selectedDistrict
+    votingMap.set(county, entryDict)
+    d3.select(this).style('fill', districtColorMap[selectedDistrict])
+  }
+};
 
 var buildMap = function() {
   county = svg.selectAll('.county')
@@ -54,10 +66,7 @@ var buildMap = function() {
         return districtColorMap[district]
       }
     })
-    .append('svg:title')
-    .text(function(d) {
-      return d.properties["NAME"]
-    });
+    .on('click', clicked);
 };
 
 d3.csv('data/IowaCountyData.csv', function(csvData) {
