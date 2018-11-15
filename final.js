@@ -5,6 +5,7 @@ var scale0 = 8000
 var border = 1; // change to 0 to remove border
 var bordercolor = 'black';
 var selectedDistrict = '0';
+var j = 0;
 
 var chartDiv = d3.select('#mapDiv').node()
 h = chartDiv.clientWidth - 33;
@@ -49,6 +50,24 @@ var projection = d3.geo.mercator()
 
 var path = d3.geo.path()
   .projection(projection)
+
+var selectDistrictOptions = ["None", "1", "2", "3", "4"]
+
+// var form = d3.select("#mapDiv").append("form");
+//
+// var labels = form.selectAll('label')
+//   .data(selectDistrictOptions)
+//   .enter()
+//   .append('label')
+//   .text(function(d) {return d})
+//   .insert("input")
+//   .attr({
+//     type: "radio",
+//     class: "shape",
+//     name: 'mode',
+//     value: function(d, i) {return i;}
+//   })
+//   .property('checked', function(d,i) {return i===j;});
 
 
 var tip = d3.select('#mapDiv').append("tip")
@@ -128,14 +147,13 @@ var buildMap = function() {
 						.style('left', (d3.event.pageX) + 40 + "px")
 						.style('top', (d3.event.pageY - 40 + "px"))
                         .style("z-index", 20);
-  })
-  .on('mouseout', function(d) {
-      tip.transition()
-          .duration(500)
-          .style('opacity', 0)
-          .style("z-index", 0)
-      ;
-  })
+    })
+    .on('mouseout', function(d) {
+        tip.transition()
+            .duration(500)
+            .style('opacity', 0)
+            .style("z-index", 0);
+    })
   .on('click', clicked);;
 
 };
