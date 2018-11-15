@@ -15,10 +15,10 @@ var tip = d3.select('#mapDiv').append("tip")
   .style('opacity', 0)
   .style('position', 'absolute')
   .style('text-align', 'center')
-  .style('width', '100px')
-  .style('height', '75px')
+  .style('width', '110px')
+  .style('height', '90px')
   .style('font', '10px sans-serif')
-  .style('background', 'darkorange')
+  .style('background', 'skyblue')
   .style('color', 'black');
 
 // Add svg and g elements to the webpage
@@ -54,10 +54,31 @@ var buildMap = function() {
         return districtColorMap[district]
       }
     })
-    .append('svg:title')
-    .text(function(d) {
-      return d.properties["NAME"]
-    });
+    .on('mouseover', function(d) {
+                    var county;
+                    county = d.properties["NAME"];
+                    pop = votingMap.get(county)["Population"];
+                    district = votingMap.get(county)["District"];
+                    tVotes = votingMap.get(county)["TotalVotes"];
+                    dem = votingMap.get(county)["Dem"];
+                    rep = votingMap.get(county)["Rep"];
+                    ind = votingMap.get(county)["Independent"];
+                    tip.html("County: " + county + "</br>" + "Population: " + pop + "</br>" + "District: " + district + "</br>" + "Total Votes: " + tVotes + "</br>" + "Democrat: " + dem + "</br>" + "Republican: " + rep + "</br>" + "Independent: " + ind)
+					tip.transition()
+						.duration(200)
+						.style('opacity', .9)
+						.style('left', (d3.event.pageX) + 40 + "px")
+						.style('top', (d3.event.pageY - 40 + "px"))
+                        .style("z-index", 20);
+  })
+  .on('mouseout', function(d) {
+      tip.transition()
+          .duration(500)
+          .style('opacity', 0)
+          .style("z-index", 0)
+      ;
+  });
+    
 };
 
 d3.csv('data/IowaCountyData.csv', function(csvData) {
@@ -75,11 +96,12 @@ d3.csv('data/IowaCountyData.csv', function(csvData) {
       'Population': pop,
       'Rep': rep,
       'Dem': dem,
-      'Indepedent': indp,
+      'Independent': indp,
       'TotalVotes': total,
       'District': CD
     }
     votingMap.set(county, countyDict);
+
   });
 
   d3.json('USCounty.json', function(error, jsonData) {
