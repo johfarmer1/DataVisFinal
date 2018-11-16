@@ -140,6 +140,7 @@ var clicked = function(d) {
     }
   }
   getFaded()
+  colorMap()
 };
 
 function getFaded() {
