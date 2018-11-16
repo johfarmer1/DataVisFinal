@@ -5,7 +5,10 @@ var scale0 = 8000
 var border = 1; // change to 0 to remove border
 var bordercolor = 'black';
 var selectedDistrict = '0';
-var j = 0;
+var fillDistrict = false;
+var populations = [];
+var forClintonRatio = [];
+
 
 chartDiv = d3.select('#mapDiv').node()
 w = chartDiv.clientWidth - 33;
@@ -51,25 +54,6 @@ var projection = d3.geo.mercator()
 var path = d3.geo.path()
   .projection(projection)
 
-var selectDistrictOptions = ["None", "1", "2", "3", "4"]
-
-// var form = d3.select("#mapDiv").append("form");
-//
-// var labels = form.selectAll('label')
-//   .data(selectDistrictOptions)
-//   .enter()
-//   .append('label')
-//   .text(function(d) {return d})
-//   .insert("input")
-//   .attr({
-//     type: "radio",
-//     class: "shape",
-//     name: 'mode',
-//     value: function(d, i) {return i;}
-//   })
-//   .property('checked', function(d,i) {return i===j;});
-
-
 var tip = d3.select('#mapDiv').append("tip")
   .attr('class', 'tooltip')
   .style('opacity', 0)
@@ -93,6 +77,38 @@ borderPath = svg.append("rect")
   .style("fill", "none")
   .style("stroke-width", border);
 
+var red = "#ac202f"
+var blue = "#2265a3"
+var purple = "#740280"
+
+var interpolateIsoRdBu = d3.scale.linear()
+  .domain([0,.5,1])
+  .range([red,purple,blue])
+  .interpolate(d3.interpolateLab);
+
+maxForClintonRatio = 2.3854780459988594;
+minForClintonRatio = 0.15556307067974298;
+maxPopulation=474768;
+medianPopulation=22109;
+minPopulation=3716;
+
+var vDomain = [minForClintonRatio, maxForClintonRatio];
+var uDomain = [minPopulation, maxPopulation];
+
+var quantization = vsup.quantization().branching(3).layers(4).valueDomain(vDomain).uncertaintyDomain(uDomain);
+var scale = vsup.scale().quantize(quantization).range(interpolateIsoRdBu);
+
+var legend = vsup.legend.arcmapLegend();
+
+  legend
+    .scale(scale)
+    .size(160)
+    .x(w - 160)
+    .y(h-200)
+    .vtitle("Dem:Rep")
+    .utitle("Population");
+
+//svg.append("g").call(legend);
 
 var districtColorMap = {
   '1': "red",
@@ -142,13 +158,16 @@ var buildMap = function() {
     .style('stroke-width', '.3px')
     .style('stroke', 'black')
     .style('fill', function(d) {
-      if (d.properties['STATE'] !== "19") {
-        return 'grey';
-      } else {
+      if (fillDistrict) {
         var county = d.properties['NAME']
         cDict = votingMap.get(county)
         district = cDict['District']
         return districtColorMap[district]
+      } else {
+        countyName = d.properties['NAME']
+        countyDict = votingMap.get(countyName)
+        return scale((countyDict["Dem"]/countyDict['Rep']), countyDict['Population']);
+
       }
     })
     .on('mouseover', function(d) {
@@ -189,6 +208,10 @@ d3.csv('data/IowaCountyData.csv', function(csvData) {
     indp = parseInt(entry['Johnson']) + parseInt(entry['Others'])
     total = parseInt(entry['Total'])
     CD = entry['CongressionalDistrict']
+
+    populations.push(pop);
+    forClintonRatio.push(dem/rep);
+
     countyDict = {
       'Population': pop,
       'Rep': rep,
