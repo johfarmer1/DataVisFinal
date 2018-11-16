@@ -110,7 +110,26 @@ var clicked = function(d) {
     votingMap.set(county, entryDict)
     d3.select(this).style('fill', districtColorMap[selectedDistrict])
   }
+  getFaded()
 };
+
+function getFaded() {
+  //remove all opacity
+  svg.selectAll('.county')
+    .transition()
+    .duration(1)
+    //.ease(d3.easeLinear)
+    .style("opacity", function(d) {
+      countyName = d.properties['NAME']
+      console.log(selectedDistrict)
+      if (votingMap.get(countyName)['District'] == selectedDistrict) {
+        console.log(countyName)
+        return 0.3
+      } else {
+        return 1.0
+      }
+    })
+}
 
 var buildMap = function() {
   var county = svg.selectAll('.county')
