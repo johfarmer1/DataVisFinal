@@ -19,11 +19,10 @@
       stroke: #000;
       shape-rendering: crispEdges;
     }
-    .expand_caret {
-    transform: scale(1.6);
-    margin-left: 8px;
-    margin-top: -4px;
-}
+    td {
+        vertical-align: middle;
+    }
+
 .slider.round {
   border-radius: 34px;
 }
@@ -35,7 +34,7 @@
 .accordion:after {
     content: '\02795'; /* Unicode character for "plus" sign (+) */
     font-size: 13px;
-    color: #777;
+    /*color: 'white';*/
     float: right;
     margin-left: 5px;
 }
@@ -43,7 +42,8 @@
 .active:after {
     content: "\2796"; /* Unicode character for "minus" sign (-) */
 }
-    .label {
+
+.label {
       text-anchor: middle;
       font-size: 12px;
       font-weight: bold;
@@ -113,13 +113,14 @@
   </style>
 </head>
 
-<body>
-
+<body class='w3-margin'>
   <div class="w3-cell-row full-height">
     <div class="w3-cell full-height w3-rest">
-
       <div id='header' class="w3-container w3-white">
-        <h1>Gerrymander Your Own Iowa!</h1>
+        <h1 class='w3-center'>Gerrymander Your Own Iowa!</h1>
+        <p>
+          This is where we put a blurb about how Gerrymandering works and what our tool lets you do ect.
+        </p>
       </div>
 
       <div id="mapDiv">
@@ -128,45 +129,77 @@
     </div>
 
 
-    <div class="w3-cell full-height" style="width:500px">
-      <div class="w3-card w3-container w3-blue-grey full-height w3-margin">
+    <div class="w3-cell w3-card-4 w3-blue-grey" style="width:500px">
+      <div class=" w3-container w3-blue-grey full-height">
         <!-Controls and Graphs->
-        <div class="w3-card w3-margin-top w3-padding-bottom">
-          <button onclick="openAccordian(event,'Discricts')" class="w3-button w3-card w3-bar w3-white w3-left-align accordion" style="z-index: 50">
-            Expand Congressional District Controls</i></button>
-          <div id="Discricts" class="w3-bar	w3-hide w3-light-grey">
-            <p align='center'>Select a district number and then click counties on the map to assign them to that district.</p>
-            <button class="w3-btn w3-bar-item w3-red distBut w3-ripple" onclick="setDistrict(event,'1')">1</button>
-            <button class="w3-btn w3-bar-item w3-green distBut w3-ripple" onclick="setDistrict(event,'2')">2</button>
-            <button class="w3-btn w3-bar-item w3-purple distBut w3-ripple" onclick="setDistrict(event,'3')">3</button>
-            <button class="w3-btn w3-bar-item w3-yellow distBut w3-ripple" onclick="setDistrict(event,'4')">4</button>
-            <button class="w3-btn w3-bar-item w3-grey distBut w3-ripple" onclick="setDistrict(event,'5')">Clear</button>
+        <div class="w3-card w3-white w3-padding w3-section">
+          <!- Controls ->
+          <div class= "w3-banner w3-white">
+            <h4 align='center'>Graph Controls</h3>
+          </div>
+          <table class="w3-table w3-banner">
+            <tr>
+              <td>
+                Show Congressional Districts
+              </td>
+              <td>
+                <label class="switch">
+                  <input id='showDistricts' type="checkbox" onclick="colorMap()">
+                  <span class="slider round "></span>
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Color By Districts?
+              </td>
+              <td>
+                <label class="switch">
+                  <input id='aggDistricts' type="checkbox" onclick="colorMap()">
+                  <span class="slider round"></span>
+                </label>
+              </td>
+            </tr>
+          </table>
+          <div class="w3-banner">
+            <button onclick="openAccordian(event,'Discricts')" class="w3-button w3-card w3-bar w3-left-align accordion" style="z-index: 50">
+              Expand Congressional District Controls</button>
+            <div id="Discricts" class="w3-bar	w3-hide w3-light-grey">
+              <p align='center'>Select a district number and then click counties on the map to assign them to that district.</p>
+              <div class="w3-cell-row">
+                <div class="w3-cell">
+                  <button class="w3-cell w3-btn w3-red distBut w3-ripple w3-fill" style="width:100%" onclick="setDistrict(event,'1')">1</button>
+                </div>
+                <div class="w3-cell">
+                  <button class="w3-cell w3-btn w3-green distBut w3-ripple" style="width:100%" onclick="setDistrict(event,'2')">2</button>
+                </div>
+                <div class="w3-cell">
+                  <button class="w3-cell w3-btn w3-purple distBut w3-ripple" style="width:100%" onclick="setDistrict(event,'3')">3</button>
+                </div>
+                <div class="w3-cell">
+                  <button class="w3-cell w3-btn w3-yellow distBut w3-ripple" style="width:100%" onclick="setDistrict(event,'4')">4</button>
+                </div>
+                <div class="w3-cell">
+                  <button class="w3-cell w3-btn w3-grey distBut w3-ripple" style="width:100%" onclick="setDistrict(event,'5')">Clear</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <table class="w3-table">
-          <tr>
-            <td>
-              Show Congressional Districts
-            </td>
-            <td>
-              <label class="switch">
-                <input id='showDistricts' type="checkbox" onclick="colorMap()">
-                <span class="slider round "></span>
-              </label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Color By Districts?
-            </td>
-            <td>
-              <label class="switch">
-                <input id='aggDistricts' type="checkbox" onclick="colorMap()">
-                <span class="slider round"></span>
-              </label>
-            </td>
-          </tr>
-        </table>
+
+        <div class="w3-card w3-white w3-padding w3-section">
+          <!- Graph 1->
+          <div class= "w3-banner w3-white">
+            <h4 align='center'>Graph 1</h3>
+          </div>
+        </div>
+
+        <div class="w3-card w3-white w3-padding w3-section">
+          <!- Graph 2->
+          <div class= "w3-banner w3-white">
+            <h4 align='center'>Graph 2</h3>
+          </div>
+        </div>
       </div>
 
     </div>

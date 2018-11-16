@@ -2,7 +2,7 @@
 //var height = 800;
 var votingMap;
 var scale0 = 8000
-var border = 1; // change to 0 to remove border
+var border = 0; // change to 0 to remove border
 var bordercolor = 'black';
 var selectedDistrict = '0';
 colorByDistrict = $(showDistricts)[0].checked;
@@ -93,8 +93,8 @@ minForClintonRatio = 0.15556307067974298;
 //medianPopulation=22109;
 //minPopulation=3716;
 
-maxPopulation = Math.max(scaled_populations)
-minPopulation = Math.min(scaled_populations)
+maxPopulation = 474768
+minPopulation = 3716
 //maxPopulation=474768;
 //medianPopulation=22109;
 //minPopulation=3716;
@@ -267,12 +267,11 @@ var buildMap = function() {
         "<div class ='w3-white w3-card'>" +
         "<table class='w3-table w3-striped w3-bordered'>" +
         "<tr><td>County: </td><td>" + county + "</td></tr>" +
-        "<tr><td>Population: </td><td align='right'>" + pop + "</td></tr>" +
+        "<tr><td>Population: </td><td align='right'>" + Number(pop).toLocaleString() + "</td></tr>" +
         "<tr><td>District: </td><td align='right'>" + district + "</td></tr>" +
-        "<tr><td>Total Votes:</td><td align='right'>" + tVotes + "</td></tr>" +
-        "<tr><td>Democrat: </td><td align='right'>" + dem + "</td></tr>" +
-        "<tr><td>Republican: </td><td align='right'>" + rep + "</td></tr>" +
-        "<tr><td>Independent: </td><td align='right'>" + ind + "</td></tr>" +
+        "<tr><td>Total Votes:</td><td align='right'>" + Number(tVotes).toLocaleString() + "</td></tr>" +
+        "<tr><td>Percent Votes for Hillary: </td><td align='right'>" +
+        Number(dem / tVotes).toFixed(2) * 100 + "%</td></tr>" +
         "</table>" +
         "</div>")
       tip.transition()
