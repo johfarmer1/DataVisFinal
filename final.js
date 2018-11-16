@@ -7,9 +7,9 @@ var bordercolor = 'black';
 var selectedDistrict = '0';
 var j = 0;
 
-var chartDiv = d3.select('#mapDiv').node()
-h = chartDiv.clientWidth - 33;
-w = chartDiv.clientHeight;
+chartDiv = d3.select('#mapDiv').node()
+w = chartDiv.clientWidth - 33;
+h = chartDiv.parentNode.clientHeight - chartDiv.parentNode.firstElementChild.clientHeight;
 
 function redraw() {
   svg
@@ -20,8 +20,8 @@ function redraw() {
     .attr("width", 10)
     .attr("height", 10);
   // Extract the width and height that was computed by CSS.
-  w = chartDiv.clientWidth - 33;
-  h = chartDiv.clientHeight;
+  w = chartDiv.clientWidth;
+  h = chartDiv.parentNode.clientHeight - chartDiv.parentNode.firstElementChild.clientHeight;
 
   // update sizes
   svg
@@ -33,7 +33,7 @@ function redraw() {
     .attr("height", h);
 
   projection
-    .scale(w*7)
+    .scale(Math.min(w, h * 1.4) * 7)
     .translate([w / 2, h / 2]);
 
   svg.selectAll('.county').attr('d', path);
@@ -98,7 +98,8 @@ var districtColorMap = {
   '1': "red",
   '2': "green",
   '3': "purple",
-  '4': "yellow"
+  '4': "yellow",
+  '5': "grey"
 };
 
 var clicked = function(d) {
@@ -132,29 +133,29 @@ var buildMap = function() {
       }
     })
     .on('mouseover', function(d) {
-                    var county;
-                    county = d.properties["NAME"];
-                    pop = votingMap.get(county)["Population"];
-                    district = votingMap.get(county)["District"];
-                    tVotes = votingMap.get(county)["TotalVotes"];
-                    dem = votingMap.get(county)["Dem"];
-                    rep = votingMap.get(county)["Rep"];
-                    ind = votingMap.get(county)["Independent"];
-                    tip.html("County: " + county + "</br>" + "Population: " + pop + "</br>" + "District: " + district + "</br>" + "Total Votes: " + tVotes + "</br>" + "Democrat: " + dem + "</br>" + "Republican: " + rep + "</br>" + "Independent: " + ind)
-					tip.transition()
-						.duration(200)
-						.style('opacity', .9)
-						.style('left', (d3.event.pageX) + 40 + "px")
-						.style('top', (d3.event.pageY - 40 + "px"))
-                        .style("z-index", 20);
+      var county;
+      county = d.properties["NAME"];
+      pop = votingMap.get(county)["Population"];
+      district = votingMap.get(county)["District"];
+      tVotes = votingMap.get(county)["TotalVotes"];
+      dem = votingMap.get(county)["Dem"];
+      rep = votingMap.get(county)["Rep"];
+      ind = votingMap.get(county)["Independent"];
+      tip.html("County: " + county + "</br>" + "Population: " + pop + "</br>" + "District: " + district + "</br>" + "Total Votes: " + tVotes + "</br>" + "Democrat: " + dem + "</br>" + "Republican: " + rep + "</br>" + "Independent: " + ind)
+      tip.transition()
+        .duration(200)
+        .style('opacity', .9)
+        .style('left', (d3.event.pageX) + 40 + "px")
+        .style('top', (d3.event.pageY - 40 + "px"))
+        .style("z-index", 20);
     })
     .on('mouseout', function(d) {
-        tip.transition()
-            .duration(500)
-            .style('opacity', 0)
-            .style("z-index", 0);
+      tip.transition()
+        .duration(500)
+        .style('opacity', 0)
+        .style("z-index", 0);
     })
-  .on('click', clicked);;
+    .on('click', clicked);;
 
 };
 

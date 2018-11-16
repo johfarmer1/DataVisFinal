@@ -2,7 +2,7 @@
 Repo for Data Visualizations final project
 
 Things we need to do in approxiate order
-- [ ] Select which district with bottons
+- [x] Select which district with bottons
 - [ ] fade currently selected district somehow
 - [ ] Show population or politcal leanings of all districts
   - [ ] have a switch to select if we want to see population or political leaning

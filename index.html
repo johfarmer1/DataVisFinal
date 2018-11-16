@@ -5,10 +5,13 @@
   <title></title>
   <script src="https://d3js.org/d3.v3.js"></script>
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <style>
-  html, body {
-  height: 100%;
-}
+    html,
+    body {
+      height: 100%;
+    }
+
     .country {
       fill: gray;
       stroke: black;
@@ -29,20 +32,65 @@
     }
 
     .full-height {
-  height: 100%;
-}
+      height: 100%;
+    }
   </style>
 </head>
 
 <body>
 
   <div class="w3-cell-row full-height">
+    <div class="w3-red w3-cell full-height w3-rest">
 
-    <div id="mapDiv" class="w3-container w3-red w3-cell full-height w3-rest">
+      <div id='header' class="w3-container w3-white">
+        <h1>Gerrymander Your Own Iowa!</h1>
+        <div class="w3-card" style="width: 300px;">
+          <button onclick="openAccordian('Discricts')" class="w3-button w3-bar w3-white w3-left-align" style="z-index: 50">
+            Set Congressional Districts</button>
 
+          <div id="Discricts" class="w3-bar	w3-hide w3-light-grey">
+            <button class="w3-btn w3-bar-item w3-red distBut w3-ripple" onclick="setDistrict(event,'1')">1</button>
+            <button class="w3-btn w3-bar-item w3-green distBut w3-ripple" onclick="setDistrict(event,'2')">2</button>
+            <button class="w3-btn w3-bar-item w3-purple distBut w3-ripple" onclick="setDistrict(event,'3')">3</button>
+            <button class="w3-btn w3-bar-item w3-yellow distBut w3-ripple" onclick="setDistrict(event,'4')">4</button>
+            <button class="w3-btn w3-bar-item w3-grey distBut w3-ripple" onclick="setDistrict(event,'5')">Clear</button>
+          </div>
+
+          <script>
+            function setDistrict(evt, district) {
+              var i, x, tablinks;
+              //set currently activated district
+              selectedDistrict = district;
+              tablinks = document.getElementsByClassName("distBut");
+              for (i = 0; i < tablinks.length; i++) {
+                if (tablinks[i].classList.contains("w3-opacity")===false){
+                  tablinks[i].className += " w3-opacity";
+                }
+              }
+              $(evt.currentTarget).removeClass(" w3-opacity");
+            }
+
+            function openAccordian(id) {
+              var x = document.getElementById(id);
+              if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+              } else {
+                x.className = x.className.replace(" w3-show", "");
+                setDistrict('0')
+              }
+              redraw()
+            }
+          </script>
+        </div>
+      </div>
+
+      <div id="mapDiv">
+
+      </div>
     </div>
 
-    <div class="w3-container w3-green w3-cell" style="width:300px">
+
+    <div class="w3-container w3-green w3-cell full-height" style="width:300px">
       <p>Hello W3.CSS Layout.</p>
     </div>
 
