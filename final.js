@@ -128,18 +128,17 @@ var districtColorMap = {
 };
 
 var clicked = function(d) {
-  if (selectedDistrict == null){
+  if (selectedDistrict == null) {
     getFaded()
+  } else {
+    if (selectedDistrict !== "0") {
+      county = d.properties["NAME"]
+      entryDict = votingMap.get(county)
+      entryDict['District'] = selectedDistrict
+      votingMap.set(county, entryDict)
+      d3.select(this).style('fill', districtColorMap[selectedDistrict])
+    }
   }
-  else{
-  if (selectedDistrict !== "0" ) {
-    county = d.properties["NAME"]
-    entryDict = votingMap.get(county)
-    entryDict['District'] = selectedDistrict
-    votingMap.set(county, entryDict)
-    d3.select(this).style('fill', districtColorMap[selectedDistrict])
-  }
-}
   getFaded()
 };
 
@@ -173,17 +172,20 @@ getFillColor = function(d) {
 }
 
 
-colorMap = function(){
+colorMap = function() {
   colorByDistrict = $(showDistricts)[0].checked;
   aggByDistrict = $(aggDistricts)[0].checked;
   county = svg.selectAll('.county')
-  .style('fill', function(d){return getFillColor(d)})
-  if(aggByDistrict){
+    .style('fill', function(d) {
+      return getFillColor(d)
+    })
+  if (aggByDistrict) {
     county
       .style('stroke-width', '1.5px')
-      .style('stroke', function(d){return getFillColor(d)})
-  }
-  else{
+      .style('stroke', function(d) {
+        return getFillColor(d)
+      })
+  } else {
     county
       .style('stroke-width', '.3px')
       .style('stroke', 'black')
@@ -192,45 +194,57 @@ colorMap = function(){
 
 
 function districtData() {
-    var popD1 = 0, popD2 = 0, popD3 = 0, popD4 = 0;
-    var votesD1 = 0, votesD2 = 0, votesD3 = 0, votesD4 = 0;
-    var demD1 = 0, demD2 = 0, demD3 = 0, demD4 = 0;
-    var repD1 = 0, repD2 = 0, repD3 = 0, repD4 = 0;
-    var indD1 = 0, indD2 = 0, indD3 = 0, indD4 = 0;
-    votingMap.forEach(function(entry) {
-        if (entry['District'] === "1"){
-            popD1 = popD1 + entry['Population'];
-            votesD1 = votesD1 + entry['TotalVotes'];
-            demD1 = demD1 + entry['Dem'];
-            repD1 = repD1 + entry['Rep'];
-            indD1 = indD1 + entry['Independent'];
-        }
-        else if (entry['District'] === "2"){
-            popD2 = popD2 + entry['Population'];
-            votesD2 = votesD2 + entry['TotalVotes'];
-            demD2 = demD2 + entry['Dem'];
-            repD2 = repD2 + entry['Rep'];
-            indD2 = indD2 + entry['Independent'];
-        }
-        else if (entry['District'] === "3"){
-            popD3 = popD3 + entry['Population'];
-            votesD3 = votesD3 + entry['TotalVotes'];
-            demD3 = demD3 + entry['Dem'];
-            repD3 = repD3 + entry['Rep'];
-            indD3 = indD3 + entry['Independent'];
-        }
-        else if (entry['District'] === "4"){
-            popD4 = popD4 + entry['Population'];
-            votesD4 = votesD4 + entry['TotalVotes'];
-            demD4 = demD4 + entry['Dem'];
-            repD4 = repD4 + entry['Rep'];
-            indD4 = indD4 + entry['Independent'];
-        }
-    })
-    console.log(votesD1);
-    console.log(votesD2);
-    console.log(votesD3);
-    console.log(votesD4);
+  var popD1 = 0,
+    popD2 = 0,
+    popD3 = 0,
+    popD4 = 0;
+  var votesD1 = 0,
+    votesD2 = 0,
+    votesD3 = 0,
+    votesD4 = 0;
+  var demD1 = 0,
+    demD2 = 0,
+    demD3 = 0,
+    demD4 = 0;
+  var repD1 = 0,
+    repD2 = 0,
+    repD3 = 0,
+    repD4 = 0;
+  var indD1 = 0,
+    indD2 = 0,
+    indD3 = 0,
+    indD4 = 0;
+  votingMap.forEach(function(entry) {
+    if (entry['District'] === "1") {
+      popD1 = popD1 + entry['Population'];
+      votesD1 = votesD1 + entry['TotalVotes'];
+      demD1 = demD1 + entry['Dem'];
+      repD1 = repD1 + entry['Rep'];
+      indD1 = indD1 + entry['Independent'];
+    } else if (entry['District'] === "2") {
+      popD2 = popD2 + entry['Population'];
+      votesD2 = votesD2 + entry['TotalVotes'];
+      demD2 = demD2 + entry['Dem'];
+      repD2 = repD2 + entry['Rep'];
+      indD2 = indD2 + entry['Independent'];
+    } else if (entry['District'] === "3") {
+      popD3 = popD3 + entry['Population'];
+      votesD3 = votesD3 + entry['TotalVotes'];
+      demD3 = demD3 + entry['Dem'];
+      repD3 = repD3 + entry['Rep'];
+      indD3 = indD3 + entry['Independent'];
+    } else if (entry['District'] === "4") {
+      popD4 = popD4 + entry['Population'];
+      votesD4 = votesD4 + entry['TotalVotes'];
+      demD4 = demD4 + entry['Dem'];
+      repD4 = repD4 + entry['Rep'];
+      indD4 = indD4 + entry['Independent'];
+    }
+  })
+  console.log(votesD1);
+  console.log(votesD2);
+  console.log(votesD3);
+  console.log(votesD4);
 }
 var buildMap = function() {
   var county = svg.selectAll('.county')
@@ -250,17 +264,17 @@ var buildMap = function() {
       rep = votingMap.get(county)["Rep"];
       ind = votingMap.get(county)["Independent"];
       tip.html(
-      "<div class ='w3-white w3-card'>"+
-      "<table class='w3-table w3-striped w3-bordered'>"+
-        "<tr><td>County: </td><td>" +county + "</td></tr>" +
-        "<tr><td>Population: </td><td align='right'>"+ pop +"</td></tr>" +
-        "<tr><td>District: </td><td align='right'>"+ district + "</td></tr>" +
-        "<tr><td>Total Votes:</td><td align='right'>"+ tVotes + "</td></tr>" +
-        "<tr><td>Democrat: </td><td align='right'>"+ dem + "</td></tr>" +
-        "<tr><td>Republican: </td><td align='right'>"+ rep + "</td></tr>" +
-        "<tr><td>Independent: </td><td align='right'>" + ind + "</td></tr>"+
-      "</table>"+
-    "</div>")
+        "<div class ='w3-white w3-card'>" +
+        "<table class='w3-table w3-striped w3-bordered'>" +
+        "<tr><td>County: </td><td>" + county + "</td></tr>" +
+        "<tr><td>Population: </td><td align='right'>" + pop + "</td></tr>" +
+        "<tr><td>District: </td><td align='right'>" + district + "</td></tr>" +
+        "<tr><td>Total Votes:</td><td align='right'>" + tVotes + "</td></tr>" +
+        "<tr><td>Democrat: </td><td align='right'>" + dem + "</td></tr>" +
+        "<tr><td>Republican: </td><td align='right'>" + rep + "</td></tr>" +
+        "<tr><td>Independent: </td><td align='right'>" + ind + "</td></tr>" +
+        "</table>" +
+        "</div>")
       tip.transition()
         .duration(20)
         .style('opacity', .9)
@@ -277,6 +291,38 @@ var buildMap = function() {
     .on('click', clicked);;
 
 };
+
+function setDistrict(evt, district) {
+  if (district == "0") {
+    selectedDistrict = district;
+    redraw()
+  } else {
+    var i, x, tablinks;
+    //set currently activated district
+    selectedDistrict = district;
+    tablinks = document.getElementsByClassName("distBut");
+    for (i = 0; i < tablinks.length; i++) {
+      if (tablinks[i].classList.contains("w3-opacity") === false) {
+        tablinks[i].className += " w3-opacity";
+      }
+    }
+    $(evt.currentTarget).removeClass(" w3-opacity");
+    getFaded()
+  }
+}
+
+function openAccordian(evt, id) {
+  var x = document.getElementById(id);
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+    $(evt.currentTarget).addClass("active");
+  } else {
+    x.className = x.className.replace(" w3-show", "");
+    $(evt.currentTarget).removeClass("active");
+    setDistrict('0')
+  }
+  redraw()
+}
 
 d3.csv('data/IowaCountyData.csv', function(csvData) {
   votingData = csvData;
