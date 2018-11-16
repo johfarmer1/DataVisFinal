@@ -13,11 +13,6 @@
       height: 100%;
     }
 
-    .country {
-      fill: gray;
-      stroke: black;
-    }
-
     .axis path,
     .axis line {
       fill: none;
@@ -35,6 +30,63 @@
     .full-height {
       height: 100%;
     }
+    .sliderWrapper{display: inline-block;postion:relative;}
+    .sliderWrapper div{display: inline-block;line-height:60px;}
+     /* The switch - the box around the slider */
+
+    .switch {
+      vertical-align: middle;
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    /* Hide default HTML checkbox */
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    /* The slider */
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
   </style>
 </head>
 
@@ -45,31 +97,38 @@
 
       <div id='header' class="w3-container w3-white">
         <h1>Gerrymander Your Own Iowa!</h1>
-        <div class="w3-card" style="width: 300px;">
-          <button onclick="openAccordian('Discricts')" class="w3-button w3-bar w3-white w3-left-align" style="z-index: 50">
-            Set Congressional Districts</button>
+        <div class='w3-cell-row'>
+          <div class="w3-cell" style="width: 300px;">
+            <button onclick="openAccordian('Discricts')" class="w3-button w3-bar w3-white w3-left-align" style="z-index: 50">
+              Set Congressional Districts</button>
 
-          <div id="Discricts" class="w3-bar	w3-hide w3-light-grey">
-            <button class="w3-btn w3-bar-item w3-red distBut w3-ripple" onclick="setDistrict(event,'1')">1</button>
-            <button class="w3-btn w3-bar-item w3-green distBut w3-ripple" onclick="setDistrict(event,'2')">2</button>
-            <button class="w3-btn w3-bar-item w3-purple distBut w3-ripple" onclick="setDistrict(event,'3')">3</button>
-            <button class="w3-btn w3-bar-item w3-yellow distBut w3-ripple" onclick="setDistrict(event,'4')">4</button>
-            <button class="w3-btn w3-bar-item w3-grey distBut w3-ripple" onclick="setDistrict(event,'5')">Clear</button>
-          </div>
+            <div id="Discricts" class="w3-bar	w3-hide w3-light-grey">
+              <button class="w3-btn w3-bar-item w3-red distBut w3-ripple" onclick="setDistrict(event,'1')">1</button>
+              <button class="w3-btn w3-bar-item w3-green distBut w3-ripple" onclick="setDistrict(event,'2')">2</button>
+              <button class="w3-btn w3-bar-item w3-purple distBut w3-ripple" onclick="setDistrict(event,'3')">3</button>
+              <button class="w3-btn w3-bar-item w3-yellow distBut w3-ripple" onclick="setDistrict(event,'4')">4</button>
+              <button class="w3-btn w3-bar-item w3-grey distBut w3-ripple" onclick="setDistrict(event,'5')">Clear</button>
+            </div>
 
-          <script>
-            function setDistrict(evt, district) {
-              var i, x, tablinks;
-              //set currently activated district
-              selectedDistrict = district;
-              tablinks = document.getElementsByClassName("distBut");
-              for (i = 0; i < tablinks.length; i++) {
-                if (tablinks[i].classList.contains("w3-opacity")===false){
-                  tablinks[i].className += " w3-opacity";
-                }
+            <script>
+              function setDistrict(evt, district) {
+              if (district == "0"){
+                selectedDistrict = district;
+                redraw()
               }
-              $(evt.currentTarget).removeClass(" w3-opacity");
-              getFaded()
+              else{
+                var i, x, tablinks;
+                //set currently activated district
+                selectedDistrict = district;
+                tablinks = document.getElementsByClassName("distBut");
+                for (i = 0; i < tablinks.length; i++) {
+                  if (tablinks[i].classList.contains("w3-opacity")===false){
+                    tablinks[i].className += " w3-opacity";
+                  }
+                }
+                $(evt.currentTarget).removeClass(" w3-opacity");
+                getFaded()
+              }
             }
 
             function openAccordian(id) {
@@ -83,6 +142,21 @@
               redraw()
             }
           </script>
+          </div>
+          <div class="sliderWrapper w3-container">
+            <div>Show Congressional Districts&nbsp;&nbsp;</div>
+            <label class="switch">
+              <input id = 'showDistricts' type="checkbox" onclick="colorMap()">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="sliderWrapper w3-container">
+            <div>Color By Districts?&nbsp;&nbsp;</div>
+            <label class="switch">
+              <input id = 'aggDistricts' type="checkbox" onclick="colorMap()">
+              <span class="slider"></span>
+            </label>
+          </div>
         </div>
       </div>
 
@@ -92,8 +166,11 @@
     </div>
 
 
-    <div class="w3-container w3-card w3-cell full-height" style="width:300px">
-      <p>Hello W3.CSS Layout.</p>
+    <div class="w3-cell full-height" style="width:300px">
+      <div class="w3-card w3-container w3-blue-grey full-height w3-margin">
+        yeet
+      </div>
+
     </div>
 
   </div>
