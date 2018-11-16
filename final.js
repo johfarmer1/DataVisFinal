@@ -191,6 +191,47 @@ colorMap = function(){
 }
 
 
+function districtData() {
+    var popD1 = 0, popD2 = 0, popD3 = 0, popD4 = 0;
+    var votesD1 = 0, votesD2 = 0, votesD3 = 0, votesD4 = 0;
+    var demD1 = 0, demD2 = 0, demD3 = 0, demD4 = 0;
+    var repD1 = 0, repD2 = 0, repD3 = 0, repD4 = 0;
+    var indD1 = 0, indD2 = 0, indD3 = 0, indD4 = 0;
+    votingMap.forEach(function(entry) {
+        if (entry['District'] === "1"){
+            popD1 = popD1 + entry['Population'];
+            votesD1 = votesD1 + entry['TotalVotes'];
+            demD1 = demD1 + entry['Dem'];
+            repD1 = repD1 + entry['Rep'];
+            indD1 = indD1 + entry['Independent'];
+        }
+        else if (entry['District'] === "2"){
+            popD2 = popD2 + entry['Population'];
+            votesD2 = votesD2 + entry['TotalVotes'];
+            demD2 = demD2 + entry['Dem'];
+            repD2 = repD2 + entry['Rep'];
+            indD2 = indD2 + entry['Independent'];
+        }
+        else if (entry['District'] === "3"){
+            popD3 = popD3 + entry['Population'];
+            votesD3 = votesD3 + entry['TotalVotes'];
+            demD3 = demD3 + entry['Dem'];
+            repD3 = repD3 + entry['Rep'];
+            indD3 = indD3 + entry['Independent'];
+        }
+        else if (entry['District'] === "4"){
+            popD4 = popD4 + entry['Population'];
+            votesD4 = votesD4 + entry['TotalVotes'];
+            demD4 = demD4 + entry['Dem'];
+            repD4 = repD4 + entry['Rep'];
+            indD4 = indD4 + entry['Independent'];
+        }
+    })
+    console.log(votesD1);
+    console.log(votesD2);
+    console.log(votesD3);
+    console.log(votesD4);
+}
 var buildMap = function() {
   var county = svg.selectAll('.county')
     .data(geoData.features);
@@ -278,6 +319,7 @@ d3.csv('data/IowaCountyData.csv', function(csvData) {
     geoData.features = filteredCounties
     buildMap();
     colorMap();
+    districtData();
   });
 });
 
