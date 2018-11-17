@@ -141,6 +141,9 @@ var clicked = function(d) {
   }
   getFaded()
   colorMap()
+  districtData()
+  makePopGraph()
+  makeVoteGraph()
 };
 
 function getFaded() {
@@ -166,9 +169,23 @@ getFillColor = function(d) {
     district = cDict['District']
     return districtColorMap[district]
   } else {
+    aggByDistrict = $(aggDistricts)[0].checked;
     countyName = d.properties['NAME']
     countyDict = votingMap.get(countyName)
-    return scale((countyDict["Dem"] / countyDict['Rep']), countyDict['ScaledPopulation']);
+    if(aggByDistrict){
+      if (countyDict['District'] === "1") {
+        return scale((demD1 / votesD1), scaled_popD1);
+      } else if (countyDict['District'] === "2") {
+        return scale((demD2 / votesD2), scaled_popD2);
+      } else if (countyDict['District'] === "3") {
+        return scale((demD3 / votesD3), scaled_popD3);
+      } else if (countyDict['District'] === "4") {
+        return scale((demD4 / votesD4), scaled_popD4);
+      }
+    }
+    else{
+      return scale((countyDict["Dem"] / countyDict['Rep']), countyDict['ScaledPopulation']);
+    }
   }
 }
 
@@ -195,26 +212,26 @@ colorMap = function() {
 
 
 function districtData() {
-  popD1 = 0,
-    popD2 = 0,
-    popD3 = 0,
-    popD4 = 0;
-  var votesD1 = 0,
-    votesD2 = 0,
-    votesD3 = 0,
-    votesD4 = 0;
-  var demD1 = 0,
-    demD2 = 0,
-    demD3 = 0,
-    demD4 = 0;
-  var repD1 = 0,
-    repD2 = 0,
-    repD3 = 0,
-    repD4 = 0;
-  var indD1 = 0,
-    indD2 = 0,
-    indD3 = 0,
-    indD4 = 0;
+  popD1 = 0
+  popD2 = 0
+  popD3 = 0
+  popD4 = 0
+  votesD1 = 0
+  votesD2 = 0
+  votesD3 = 0
+  votesD4 = 0
+  demD1 = 0
+  demD2 = 0
+  demD3 = 0
+  demD4 = 0
+  repD1 = 0
+  repD2 = 0
+  repD3 = 0
+  repD4 = 0
+  indD1 = 0
+  indD2 = 0
+  indD3 = 0
+  indD4 = 0
   votingMap.forEach(function(entry) {
     if (entry['District'] === "1") {
       popD1 = popD1 + entry['Population'];
@@ -242,12 +259,12 @@ function districtData() {
       indD4 = indD4 + entry['Independent'];
     }
   })
-  console.log(votesD1);
-  console.log(votesD2);
-  console.log(votesD3);
-  console.log(votesD4);
-  return popD1, popD2, popD3, popD4
+  scaled_popD1 = Math.sqrt(popD1)
+  scaled_popD2 = Math.sqrt(popD2)
+  scaled_popD3 = Math.sqrt(popD3)
+  scaled_popD4 = Math.sqrt(popD4)
 }
+
 var buildMap = function() {
   var county = svg.selectAll('.county')
     .data(geoData.features);
@@ -289,7 +306,7 @@ var buildMap = function() {
         .style('opacity', 0)
         .style("z-index", 0);
     })
-    .on('click', clicked);;
+    .on('click', clicked);
 
 };
 
@@ -310,6 +327,9 @@ function setDistrict(evt, district) {
     $(evt.currentTarget).removeClass(" w3-opacity");
     getFaded()
   }
+  districtData();
+  makePopGraph();
+  makeVoteGraph();
 }
 
 function openAccordian(evt, id) {
@@ -325,18 +345,92 @@ function openAccordian(evt, id) {
   redraw()
 }
 
+
+
 makePopGraph = function() {
-  data = {
-    type: "bar",
-    x: ['1', '2', '3', '4'],
-    y: [popD1, popD2, popD3, popD4]
+  var original_data = {
+    name: 'Original Districts',
+    type: 'bar',
+    y: ['1', '2', '3', '4'],
+    x: [771049, 778869, 823243, 757708],
+    orientation: 'h'
   }
+
+  var new_data = {
+    name: 'Your Districts',
+    type: "bar",
+    y: ['1', '2', '3', '4'],
+    x: [popD1, popD2, popD3, popD4],
+    orientation: 'h'
+  }
+
   var layout = {
     title: 'Population of Each District',
-    showlegend: false
+    showlegend: false,
+
+    height: 300,
+    xaxis: {
+      title: 'District Population'
+    },
+    yaxis: {
+      title: 'District Number'
+    }
   }
-  console.log('yeet')
-  Plotly.newPlot('popDiv', [data], layout)
+
+  Plotly.react('popDiv', [original_data, new_data], layout)
+
+}
+
+
+makeVoteGraph = function() {
+  var original_data = {
+    name: 'Original Districts',
+    type: 'bar',
+    y: ['1', '2', '3', '4'],
+    x: [0.4462089866113292, 0.4416078232486768, 0.44470166399777206, 0.33199909313361425],
+    orientation: 'h'
+  }
+
+  var new_data = {
+    name: 'Your Districts',
+    type: "bar",
+    y: ['1', '2', '3', '4'],
+    x: [demD1 / votesD1, demD2 / votesD2, demD3 / votesD3, demD4 / votesD4],
+    orientation: 'h'
+  }
+
+  var layout = {
+    title: 'Election Result of Each District',
+    showlegend: false,
+
+    height: 300,
+    xaxis: {
+      title: 'Percent Votes for Hillary',
+      range: [0, .6],
+      autotick: false,
+      tick0: 0,
+      dtick: 0.1
+    },
+    yaxis: {
+      title: 'District Number'
+    },
+    shapes: [{
+      type: 'line',
+      x0: 0.5,
+      y0: 0.5,
+      x1: 0.5,
+      y1: 4.5,
+      line: {
+        color: 'rgb(55, 128, 191)',
+        width: 3,
+        dash: 'dot'
+      }
+    }]
+
+  }
+
+  Plotly.react('voteDiv', [original_data, new_data], layout)
+
 }
 
 var getCsv = function() {
@@ -394,6 +488,7 @@ $.when(
   var votingMap = res1
   districtData();
   makePopGraph();
+  makeVoteGraph();
 }).fail(function(err) {
   console.log(err);
 });
