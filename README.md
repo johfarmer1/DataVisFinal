@@ -10,9 +10,9 @@ Things we need to do in approxiate order
   - [x] Population of districts
   - [x] Political leaning of each district
   - [ ] Overall election results of the state (compare to baseline)
-- [ ] Have a clear all districts button
+- [x] Have a clear all districts button
 - [x] HAve a mode where we instead show districts political leaning on the map
-- [ ] Write instructions / context blurb
+- [x] Write instructions / context blurb
 
 Stretch Goal:
 - [ ] make text right align in tooltip

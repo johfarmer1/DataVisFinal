@@ -61,8 +61,8 @@ var tip = d3.select('#mapDiv').append("tip")
   //.style('width', '110px')
   //.style('height', '90px')
   .style('font', '10px sans-serif')
-  //.style('background', 'skyblue')
-  .style('color', 'black');
+//.style('background', 'skyblue')
+//.style('color', 'black');
 
 // Add svg and g elements to the webpage
 svg = d3.select("#mapDiv").append("svg")
@@ -164,15 +164,10 @@ function getFaded() {
 
 getFillColor = function(d) {
   if (colorByDistrict) {
-    var county = d.properties['NAME']
-    cDict = votingMap.get(county)
-    district = cDict['District']
-    return districtColorMap[district]
-  } else {
     aggByDistrict = $(aggDistricts)[0].checked;
     countyName = d.properties['NAME']
     countyDict = votingMap.get(countyName)
-    if(aggByDistrict){
+    if (aggByDistrict) {
       if (countyDict['District'] === "1") {
         return scale((demD1 / votesD1), scaled_popD1);
       } else if (countyDict['District'] === "2") {
@@ -182,10 +177,14 @@ getFillColor = function(d) {
       } else if (countyDict['District'] === "4") {
         return scale((demD4 / votesD4), scaled_popD4);
       }
-    }
-    else{
+    } else {
       return scale((countyDict["Dem"] / countyDict['Rep']), countyDict['ScaledPopulation']);
     }
+  } else {
+    var county = d.properties['NAME']
+    cDict = votingMap.get(county)
+    district = cDict['District']
+    return districtColorMap[district]
   }
 }
 
@@ -263,6 +262,8 @@ function districtData() {
   scaled_popD2 = Math.sqrt(popD2)
   scaled_popD3 = Math.sqrt(popD3)
   scaled_popD4 = Math.sqrt(popD4)
+  makePopGraph();
+  makeVoteGraph();
 }
 
 var buildMap = function() {
@@ -313,7 +314,6 @@ var buildMap = function() {
 function setDistrict(evt, district) {
   if (district == "0") {
     selectedDistrict = district;
-    redraw()
   } else {
     var i, x, tablinks;
     //set currently activated district
@@ -328,8 +328,6 @@ function setDistrict(evt, district) {
     getFaded()
   }
   districtData();
-  makePopGraph();
-  makeVoteGraph();
 }
 
 function openAccordian(evt, id) {
@@ -345,11 +343,20 @@ function openAccordian(evt, id) {
   redraw()
 }
 
+//Clears the district of each county
+function clearAllDisricts() {
+  votingMap.forEach(function(county) {
+    county['District'] = '5'
+  });
+  d3.selectAll('.county').style('fill', districtColorMap['5'])
+  districtData();
+  colorMap();
+}
 
 
 makePopGraph = function() {
   var original_data = {
-    name: 'Original Districts',
+    name: 'Before',
     type: 'bar',
     y: ['1', '2', '3', '4'],
     x: [771049, 778869, 823243, 757708],
@@ -384,7 +391,7 @@ makePopGraph = function() {
 
 makeVoteGraph = function() {
   var original_data = {
-    name: 'Original Districts',
+    name: 'Before',
     type: 'bar',
     y: ['1', '2', '3', '4'],
     x: [0.4462089866113292, 0.4416078232486768, 0.44470166399777206, 0.33199909313361425],
@@ -487,8 +494,6 @@ $.when(
 ).done(function(res1) {
   var votingMap = res1
   districtData();
-  makePopGraph();
-  makeVoteGraph();
 }).fail(function(err) {
   console.log(err);
 });
