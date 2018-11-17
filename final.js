@@ -182,7 +182,6 @@ getFillColor = function(d) {
   }
 }
 
-
 colorMap = function() {
   colorByDistrict = $(showDistricts)[0].checked;
   aggByDistrict = $(aggDistricts)[0].checked;
@@ -202,7 +201,6 @@ colorMap = function() {
       .style('stroke', 'black')
   }
 }
-
 
 function districtData() {
   popD1 = 0
@@ -285,7 +283,7 @@ var buildMap = function() {
         "<tr><td>District: </td><td align='right'>" + district + "</td></tr>" +
         "<tr><td>Total Votes:</td><td align='right'>" + Number(tVotes).toLocaleString() + "</td></tr>" +
         "<tr><td>Percent Votes for Hillary: </td><td align='right'>" +
-        Number(dem / tVotes).toFixed(2) * 100 + "%</td></tr>" +
+        Number(dem / tVotes * 100 ).toFixed(2)+ "%</td></tr>" +
         "</table>" +
         "</div>")
       tip.transition()
@@ -381,7 +379,6 @@ makePopGraph = function() {
   Plotly.react('popDiv', [original_data, new_data], layout)
 
 }
-
 
 makeVoteGraph = function() {
   var original_data = {

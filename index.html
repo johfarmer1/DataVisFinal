@@ -48,16 +48,16 @@
     content: "\2796"; /* Unicode character for "minus" sign (-) */
 }
 
-.label {
+  .label {
       text-anchor: middle;
       font-size: 12px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    .full-height {
-      height: 100%;
-    }
+  .full-height {
+height: 100%;
+  }
     .sliderWrapper{display: inline-block;postion:relative;}
     .sliderWrapper div{display: inline-block;line-height:60px;}
      /* The switch - the box around the slider */
@@ -126,7 +126,7 @@
         <p>
           Gerrymandering is the political strategy in which voting districts are redistributed in order to favor a
           political party in an election. In our tool, use the congressional districts control to change the districts of
-          Iowa to try to gain additional votes for Hillary in the 2016 presidential election.
+          Iowa to try to gain additional votes for Hillary Clinton in the 2016 presidential election.
         </p>
       </div>
 
@@ -136,12 +136,12 @@
     </div>
 
 
-    <div class="w3-cell w3-card-4 w3-blue-grey" style="width:500px">
-      <div class=" w3-container w3-blue-grey full-height" style="overflow:auto">
+    <div class="w3-cell w3-card-4 w3-round w3-blue-grey" style="width:500px">
+      <div class=" w3-container w3-round w3-blue-grey full-height" style="overflow:auto">
         <!-Controls and Graphs->
         <div class="w3-card w3-round w3-white w3-padding w3-section">
           <!- Controls ->
-          <div class= "w3-banner w3-white">
+          <div class="w3-banner w3-white">
             <h4 align='center'>Graph Controls</h3>
           </div>
           <table class="w3-table w3-banner">
@@ -199,17 +199,17 @@
 
         <div class="w3-card w3-round w3-white w3-padding w3-section">
           <!- Graph 1->
-          <div class= "w3-banner w3-white">
-              <div id= 'popDiv'></div>
-              <div class='w3-center'>Districts have to be about the same population.</div>
+          <div class="w3-banner w3-white">
+            <div id='popDiv'></div>
+            <div class='w3-center w3-small'>Districts have to be about the same population.</div>
           </div>
         </div>
 
         <div class="w3-card w3-round w3-white w3-padding w3-section">
           <!- Graph 2->
-          <div class= "w3-banner w3-white">
-            <div id ='voteDiv'></div>
-            <div class='w3-center'>Hillary gets an electoral college vote if she has more than 50% of the vote for a district.</div>
+          <div class="w3-banner w3-white">
+            <div id='voteDiv'></div>
+            <div class='w3-center w3-small'>Hillary gets an electoral college vote if she has more than 50% of the vote for a district.</div>
           </div>
         </div>
       </div>
