@@ -195,7 +195,7 @@ colorMap = function() {
 
 
 function districtData() {
-  var popD1 = 0,
+  popD1 = 0,
     popD2 = 0,
     popD3 = 0,
     popD4 = 0;
@@ -246,6 +246,7 @@ function districtData() {
   console.log(votesD2);
   console.log(votesD3);
   console.log(votesD4);
+  return popD1, popD2, popD3, popD4
 }
 var buildMap = function() {
   var county = svg.selectAll('.county')
@@ -324,50 +325,80 @@ function openAccordian(evt, id) {
   redraw()
 }
 
-d3.csv('data/IowaCountyData.csv', function(csvData) {
-  votingData = csvData;
-  votingMap = new Map();
-  votingData.forEach(function(entry) {
-    county = entry['County']
-    pop = parseInt(entry['Population'])
-    popScaled = Math.sqrt(parseInt(entry['Population']))
-    rep = parseInt(entry['Trump'])
-    dem = parseInt(entry['Clinton'])
-    indp = parseInt(entry['Johnson']) + parseInt(entry['Others'])
-    total = parseInt(entry['Total'])
-    CD = entry['CongressionalDistrict']
+makePopGraph = function() {
+  data = {
+    type: "bar",
+    x: ['1', '2', '3', '4'],
+    y: [popD1, popD2, popD3, popD4]
+  }
+  var layout = {
+    title: 'Population of Each District',
+    showlegend: false
+  }
+  console.log('yeet')
+  Plotly.newPlot('popDiv', [data], layout)
+}
 
-    populations.push(pop);
-    scaled_populations.push(popScaled);
-    forClintonRatio.push(dem / rep);
+var getCsv = function() {
+  var defer = $.Deferred();
+  d3.csv('data/IowaCountyData.csv', function(csvData) {
+    votingData = csvData;
+    votingMap = new Map();
+    votingData.forEach(function(entry) {
+      county = entry['County']
+      pop = parseInt(entry['Population'])
+      popScaled = Math.sqrt(parseInt(entry['Population']))
+      rep = parseInt(entry['Trump'])
+      dem = parseInt(entry['Clinton'])
+      indp = parseInt(entry['Johnson']) + parseInt(entry['Others'])
+      total = parseInt(entry['Total'])
+      CD = entry['CongressionalDistrict']
 
-    countyDict = {
-      'Population': pop,
-      'ScaledPopulation': popScaled,
-      'Rep': rep,
-      'Dem': dem,
-      'Independent': indp,
-      'TotalVotes': total,
-      'District': CD
-    }
-    votingMap.set(county, countyDict);
+      populations.push(pop);
+      scaled_populations.push(popScaled);
+      forClintonRatio.push(dem / rep);
 
+      countyDict = {
+        'Population': pop,
+        'ScaledPopulation': popScaled,
+        'Rep': rep,
+        'Dem': dem,
+        'Independent': indp,
+        'TotalVotes': total,
+        'District': CD
+      }
+      votingMap.set(county, countyDict);
+
+    });
+    d3.json('USCounty.json', function(error, jsonData) {
+      geoData = jsonData;
+
+      //Filter to only Iowa
+      var holder = geoData.features
+      var filteredCounties = holder.filter(function(el) {
+        return el.properties.STATE == "19"
+      })
+      geoData.features = filteredCounties
+      buildMap();
+      colorMap();
+      districtData();
+    });
+    defer.resolve(votingMap);
   });
+  return defer.promise();
+};
 
-  d3.json('USCounty.json', function(error, jsonData) {
-    geoData = jsonData;
-
-    //Filter to only Iowa
-    var holder = geoData.features
-    var filteredCounties = holder.filter(function(el) {
-      return el.properties.STATE == "19"
-    })
-    geoData.features = filteredCounties
-    buildMap();
-    colorMap();
-    districtData();
-  });
+$.when(
+  getCsv(), // please pass csv url as you like
+).done(function(res1) {
+  var votingMap = res1
+  districtData();
+  makePopGraph();
+}).fail(function(err) {
+  console.log(err);
 });
+
+
 
 // Draw for the first time to initialize.
 redraw();
