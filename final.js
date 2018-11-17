@@ -285,7 +285,7 @@ var buildMap = function() {
         "<tr><td>District: </td><td align='right'>" + district + "</td></tr>" +
         "<tr><td>Total Votes:</td><td align='right'>" + Number(tVotes).toLocaleString() + "</td></tr>" +
         "<tr><td>Percent Votes for Hillary: </td><td align='right'>" +
-        Number(dem / tVotes).toFixed(2) * 100 + "%</td></tr>" +
+        (Number(dem / tVotes) * 100).toFixed(2) + "%</td></tr>" +
         "</table>" +
         "</div>")
       tip.transition()
