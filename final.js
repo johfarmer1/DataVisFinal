@@ -101,15 +101,54 @@ var quantization = vsup.squareQuantization().n(5).valueDomain(vDomain).uncertain
 var scale = vsup.scale().quantize(quantization).range(interpolateIsoRdBu);
 
 var legend = vsup.legend.heatmapLegend();
-//var legend = vsup.legend.arcmapLegend();
 
-legend
-  .scale(scale)
-  .size(160)
-  .x(w - 160)
-  .y(h - 200)
-  .vtitle("Dem:Rep")
-  .utitle("Population");
+var linearGradient = svg.append('linearGradient').attr('id', 'linearGradient');
+  linearGradient.append('stop')
+    .attr('offset', '0%')
+    .attr("stop-color", red );
+  linearGradient.append('stop')
+    .attr('offset', '50%')
+    .attr("stop-color", purple );
+  linearGradient.append('stop')
+    .attr('offset', '100%')
+    .attr('stop-color', blue );
+
+var greyGradient = svg.append('linearGradient').attr('id', 'greyGradient')
+  .attr('gradientTransform', "rotate(90)");
+
+greyGradient.append('stop')
+  .attr('offset', '0%')
+  .attr("stop-color", "rgba(255,255,255,0)" );
+greyGradient.append('stop')
+  .attr('offset', '100%')
+  .attr("stop-color", "rgba(255,255,255,.85)" );
+
+
+//color map legend
+var legend = svg.append('rect')
+  .attr('width', 150)
+  .attr('height', 150)
+  .attr('x', w-200)
+  .attr('y', h-200)
+  .attr('z-index', 0)
+  .style('fill', "url(#linearGradient)");
+
+var legend2 = svg.append('rect')
+  .attr('width', 150)
+  .attr('height', 150)
+  .attr('x', w-200)
+  .attr('y', h-200)
+  .attr("z-index", 1)
+  .attr('fill', 'url(#greyGradient)')
+  .style('opacity', .95);
+
+// legend
+//   .scale(scale)
+//   .size(160)
+//   .x(w - 160)
+//   .y(h - 200)
+//   .vtitle("Dem:Rep")
+//   .utitle("Population");
 
 //svg.append("g").call(legend);
 
