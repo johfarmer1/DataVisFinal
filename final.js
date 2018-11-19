@@ -273,15 +273,14 @@ function getFaded() {
 
 getFillColor = function(d) {
   if (colorByDistrict) {
-    legend.style('opacity',1)
-    legend2.style('opacity',.9)
-    svg.selectAll('.legendlabel').remove()
-    createLegendLabels()
     aggByDistrict = $(aggDistricts)[0].checked;
     countyName = d.properties['NAME']
     countyDict = votingMap.get(countyName)
     if (aggByDistrict) {
       if (countyDict['District'] === "1") {
+        if (demD1 < repD1) {
+          return red
+        }
         return scale((demD1 / votesD1), scaled_popD1);
       } else if (countyDict['District'] === "2") {
         return scale((demD2 / votesD2), scaled_popD2);
@@ -294,9 +293,6 @@ getFillColor = function(d) {
       return scale((countyDict["Dem"] / countyDict['Rep']), countyDict['ScaledPopulation']);
     }
   } else {
-    legend.style('opacity', 0)
-    legend2.style('opacity', 0)
-    svg.selectAll('.legendlabel').remove()
     var county = d.properties['NAME']
     cDict = votingMap.get(county)
     district = cDict['District']
@@ -311,6 +307,16 @@ colorMap = function() {
     .style('fill', function(d) {
       return getFillColor(d)
     })
+  if (colorByDistrict && !aggByDistrict) {
+    legend.style('opacity',1)
+    legend2.style('opacity',.9)
+    svg.selectAll('.legendlabel').remove()
+    createLegendLabels()
+  } else {
+    legend.style('opacity', 0)
+    legend2.style('opacity', 0)
+    svg.selectAll('.legendlabel').remove()
+  }
   if (aggByDistrict) {
     county
       .style('stroke-width', '1.5px')
