@@ -1,5 +1,3 @@
-//var width = 1200;
-//var height = 800;
 var votingMap;
 var scale0 = 8000
 var border = 0; // change to 0 to remove border
@@ -79,17 +77,12 @@ var tip = d3.select('#mapDiv').append("tip")
   .style('opacity', 0)
   .style('position', 'absolute')
   .style('text-align', 'center')
-  //.style('width', '110px')
-  //.style('height', '90px')
   .style('font', '10px sans-serif')
-//.style('background', 'skyblue')
-//.style('color', 'black');
 
 // Add svg and g elements to the webpage
 svg = d3.select("#mapDiv").append("svg")
   .attr("border", border)
 
-//.style('position', 'fixed');
 borderPath = svg.append("rect")
   .attr("x", 0)
   .attr("y", 0)
@@ -118,7 +111,6 @@ var vDomain = [minForClintonRatio, maxForClintonRatio];
 var uDomain = [maxPopulation, minPopulation];
 
 var quantization = vsup.squareQuantization().n(5).valueDomain(vDomain).uncertaintyDomain(uDomain);
-//var quantization = vsup.quantization().branching(3).layers(4).valueDomain(vDomain).uncertaintyDomain(uDomain);
 var scale = vsup.scale().quantize(quantization).range(interpolateIsoRdBu);
 
 var legend = vsup.legend.heatmapLegend();
@@ -187,7 +179,7 @@ var createLegendLabels = function() {
     .attr('class', 'legendlabel')
     .text("0")
     .attr('x', legendX)
-    .attr('y', legendY-5)
+    .attr('y', legendY-10)
     .style('weight', 'bold')
     .style('font-size', '12px')
 
@@ -195,7 +187,7 @@ var createLegendLabels = function() {
     .attr('class', 'legendlabel')
     .text("100")
     .attr('x', legendX+legendWidth-22.5)
-    .attr('y', legendY-5)
+    .attr('y', legendY-10)
     .style('weight', 'bold')
     .style('font-size', '12px')
 
@@ -212,7 +204,7 @@ var createLegendLabels = function() {
   var label5 = svg.append('text')
     .attr('class', 'legendlabel')
     .text("474768")
-    .attr('x', legendX + legendWidth)
+    .attr('x', legendX + legendWidth +15)
     .attr('y', legendY + 15)
     .style('weight', 'bold')
     .style('font-size', '12px')
@@ -220,7 +212,7 @@ var createLegendLabels = function() {
   var label6 = svg.append('text')
     .attr('class', 'legendlabel')
     .text("3716")
-    .attr('x', legendX + legendWidth)
+    .attr('x', legendX + legendWidth +15)
     .attr('y', legendY + legendWidth)
     .style('weight', 'bold')
     .style('font-size', '12px')
@@ -260,7 +252,6 @@ function getFaded() {
   svg.selectAll('.county')
     .transition()
     .duration(1)
-    //.ease(d3.easeLinear)
     .style("opacity", function(d) {
       countyName = d.properties['NAME']
       if (votingMap.get(countyName)['District'] == selectedDistrict) {
@@ -275,19 +266,52 @@ getFillColor = function(d) {
   if (colorByDistrict) {
     legend.style('opacity',1)
     legend2.style('opacity',.9)
+    svg.selectAll('.legendlabel').remove()
     createLegendLabels()
     aggByDistrict = $(aggDistricts)[0].checked;
     countyName = d.properties['NAME']
     countyDict = votingMap.get(countyName)
     if (aggByDistrict) {
       if (countyDict['District'] === "1") {
-        return scale((demD1 / votesD1), scaled_popD1);
+        if ((demD1 /repD1)-1 < 0) {
+          return "#ac202f";
+        }
+        else if ((demD1 /repD1)-1 == 0) {
+          return "#740280";
+        }
+        else {
+          return "#2265a3";
+        }
       } else if (countyDict['District'] === "2") {
-        return scale((demD2 / votesD2), scaled_popD2);
+        if ((demD2 /repD2)-1 < 0) {
+          return "#ac202f";
+        }
+        else if ((demD2 /repD2)-1 == 0) {
+          return "#740280";
+        }
+        else {
+          return "#2265a3";
+        }
       } else if (countyDict['District'] === "3") {
-        return scale((demD3 / votesD3), scaled_popD3);
+        if ((demD3 /repD3)-1 < 0) {
+          return "#ac202f";
+        }
+        else if ((demD3 /repD3)-1 == 0) {
+          return "#740280";
+        }
+        else {
+          return "#2265a3";
+        }
       } else if (countyDict['District'] === "4") {
-        return scale((demD4 / votesD4), scaled_popD4);
+        if ((demD4 /repD4)-1 < 0) {
+          return "#ac202f";
+        }
+        else if ((demD4 /repD4)-1 == 0) {
+          return "#740280";
+        }
+        else {
+          return "#2265a3";
+        }
       }
     } else {
       return scale((countyDict["Dem"] / countyDict['Rep']), countyDict['ScaledPopulation']);
@@ -418,7 +442,7 @@ var buildMap = function() {
       tip.transition()
         .duration(50)
         .style('opacity', 0)
-        .style("z-index", 0);
+        .style("z-index", -99990);
     })
     .on('click', clicked);
 
@@ -506,7 +530,7 @@ makeVoteGraph = function() {
     name: 'Before',
     type: 'bar',
     y: ['1', '2', '3', '4'],
-    x: [0.4462089866113292, 0.4416078232486768, 0.44470166399777206, 0.33199909313361425],
+    x:[0.9271309279974791-1,0.9061392648251718-1,0.9230130057803468-1,0.5509732775733147-1],
     orientation: 'h'
   }
 
@@ -514,7 +538,7 @@ makeVoteGraph = function() {
     name: 'Your Districts',
     type: "bar",
     y: ['1', '2', '3', '4'],
-    x: [demD1 / votesD1, demD2 / votesD2, demD3 / votesD3, demD4 / votesD4],
+    x: [(demD1 /repD1)-1, (demD2 / repD2)-1, (demD3 / repD3)-1, (demD4 / repD4)-1],
     orientation: 'h'
   }
 
@@ -524,28 +548,16 @@ makeVoteGraph = function() {
 
     height: 300,
     xaxis: {
-      title: 'Percent Votes for Hillary',
-      range: [0, .6],
+      title: 'Hillary Win Margin',
+      range: [-.5, .5],
       autotick: false,
       tick0: 0,
-      dtick: 0.1
+      dtick: 0.1,
+      tickformat: ',.0%'
     },
     yaxis: {
       title: 'District Number'
-    },
-    shapes: [{
-      type: 'line',
-      x0: 0.5,
-      y0: 0.5,
-      x1: 0.5,
-      y1: 4.5,
-      line: {
-        color: 'rgb(55, 128, 191)',
-        width: 3,
-        dash: 'dot'
-      }
-    }]
-
+    }
   }
 
   Plotly.react('voteDiv', [original_data, new_data], layout)
