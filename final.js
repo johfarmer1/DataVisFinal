@@ -128,6 +128,49 @@ greyGradient.append('stop')
   .attr('offset', '100%')
   .attr("stop-color", "rgba(255,255,255,.85)" );
 
+var label1 = svg.append('text')
+  .text("Percentage of votes for Clinton")
+  .attr('x', w-203)
+  .attr('y', h-220)
+  .style('weight', 'bold')
+  .style('font-size', '10px')
+
+var label2 = svg.append('text')
+  .text("0")
+  .attr('x', w-202)
+  .attr('y', h-205)
+  .style('weight', 'bold')
+  .style('font-size', '12px')
+
+var label3 = svg.append('text')
+  .text("100")
+  .attr('x', w-72)
+  .attr('y', h-205)
+  .style('weight', 'bold')
+  .style('font-size', '12px')
+
+var label4 = svg.append('text')
+  .text("Population Size")
+  .attr('x', w-35)
+  .attr('y', h-105)
+  .style('weight', 'bold')
+  .style('font-size', '10px')
+  .attr('transform', function() {var newW = w - 5, newH = h-135;
+									 return "rotate(90, " + newW + "," + newH + ")"});
+
+var label5 = svg.append('text')
+  .text("474768")
+  .attr('x', w-46)
+  .attr('y', h-188)
+  .style('weight', 'bold')
+  .style('font-size', '12px')
+
+var label6 = svg.append('text')
+  .text("3716")
+  .attr('x', w-46)
+  .attr('y', h-53)
+  .style('weight', 'bold')
+  .style('font-size', '12px')
 
 //color map legend
 var legend = svg.append('rect')
