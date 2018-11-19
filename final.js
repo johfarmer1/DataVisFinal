@@ -56,7 +56,7 @@ function redraw() {
     .attr('height',w/7)
     .attr('x', w - (w/5) + "px")
     .attr('y', h - (w/5) + "px")
-    legend.style('opacity',.95);
+    .style('opacity',.95);
     createLegendLabels()
   } else {
     legend.style('opacity',0)
