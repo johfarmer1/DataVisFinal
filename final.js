@@ -42,6 +42,11 @@ function redraw() {
     .translate([w / 2, h / 2]);
 
   svg.selectAll('.county').attr('d', path);
+  svg.selectAll('legend')
+  .attr('width', w/6)
+  .attr('height',w/6)
+  .attr('x', w - (w/5) + "px")
+  .attr('y', h - (w/5) + "px");
 };
 
 var projection = d3.geo.mercator()
@@ -126,18 +131,20 @@ greyGradient.append('stop')
 
 //color map legend
 var legend = svg.append('rect')
-  .attr('width', 150)
-  .attr('height', 150)
-  .attr('x', w-200)
-  .attr('y', h-200)
+  .attr('id','legend')
+  .attr('width', w/6)
+  .attr('height',w/6)
+  .attr('x', w - (w/5) + "px")
+  .attr('y', h - (w/5) + "px")
   .attr('z-index', 0)
   .style('fill', "url(#linearGradient)");
 
 var legend2 = svg.append('rect')
-  .attr('width', 150)
-  .attr('height', 150)
-  .attr('x', w-200)
-  .attr('y', h-200)
+  .attr('id','legend')
+  .attr('width', w/6)
+  .attr('height',w/6)
+  .attr('x', w - (w/5) + "px")
+  .attr('y', h - (w/5) + "px")
   .attr("z-index", 1)
   .attr('fill', 'url(#greyGradient)')
   .style('opacity', .95);
