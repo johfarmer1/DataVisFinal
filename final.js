@@ -42,11 +42,27 @@ function redraw() {
     .translate([w / 2, h / 2]);
 
   svg.selectAll('.county').attr('d', path);
-  svg.selectAll('legend')
-  .attr('width', w/6)
-  .attr('height',w/6)
-  .attr('x', w - (w/5) + "px")
-  .attr('y', h - (w/5) + "px");
+
+  svg.selectAll('.legendlabel').remove()
+  if ($(showDistricts)[0].checked) {
+    legend
+    .attr('width', w/7)
+    .attr('height',w/7)
+    .attr('x', w - (w/5) + "px")
+    .attr('y', h - (w/5) + "px")
+    .style('opacity',1);
+    legend2
+    .attr('width', w/7)
+    .attr('height',w/7)
+    .attr('x', w - (w/5) + "px")
+    .attr('y', h - (w/5) + "px")
+    legend.style('opacity',.95);
+    createLegendLabels()
+  } else {
+    legend.style('opacity',0)
+    legend2.style('opacity',0)
+  }
+
 };
 
 var projection = d3.geo.mercator()
@@ -128,85 +144,95 @@ greyGradient.append('stop')
   .attr('offset', '100%')
   .attr("stop-color", "rgba(255,255,255,.85)" );
 
-var label1 = svg.append('text')
-  .text("Percentage of votes for Clinton")
-  .attr('x', w-203)
-  .attr('y', h-220)
-  .style('weight', 'bold')
-  .style('font-size', '10px')
-
-var label2 = svg.append('text')
-  .text("0")
-  .attr('x', w-202)
-  .attr('y', h-205)
-  .style('weight', 'bold')
-  .style('font-size', '12px')
-
-var label3 = svg.append('text')
-  .text("100")
-  .attr('x', w-72)
-  .attr('y', h-205)
-  .style('weight', 'bold')
-  .style('font-size', '12px')
-
-var label4 = svg.append('text')
-  .text("Population Size")
-  .attr('x', w-35)
-  .attr('y', h-105)
-  .style('weight', 'bold')
-  .style('font-size', '10px')
-  .attr('transform', function() {var newW = w - 5, newH = h-135;
-									 return "rotate(90, " + newW + "," + newH + ")"});
-
-var label5 = svg.append('text')
-  .text("474768")
-  .attr('x', w-46)
-  .attr('y', h-188)
-  .style('weight', 'bold')
-  .style('font-size', '12px')
-
-var label6 = svg.append('text')
-  .text("3716")
-  .attr('x', w-46)
-  .attr('y', h-53)
-  .style('weight', 'bold')
-  .style('font-size', '12px')
 
 //color map legend
 var legend = svg.append('rect')
-  .attr('id','legend')
-  .attr('width', w/6)
-  .attr('height',w/6)
+  .attr('class','legend')
+  .attr('width', w/7)
+  .attr('height',w/7)
   .attr('x', w - (w/5) + "px")
   .attr('y', h - (w/5) + "px")
   .attr('z-index', 0)
   .style('fill', "url(#linearGradient)");
 
 var legend2 = svg.append('rect')
-  .attr('id','legend')
-  .attr('width', w/6)
-  .attr('height',w/6)
+  .attr('class','legend')
+  .attr('width', w/7)
+  .attr('height',w/7)
   .attr('x', w - (w/5) + "px")
   .attr('y', h - (w/5) + "px")
   .attr("z-index", 1)
   .attr('fill', 'url(#greyGradient)')
   .style('opacity', .95);
 
-// legend
-//   .scale(scale)
-//   .size(160)
-//   .x(w - 160)
-//   .y(h - 200)
-//   .vtitle("Dem:Rep")
-//   .utitle("Population");
 
-//svg.append("g").call(legend);
+var createLegendLabels = function() {
+
+  var legendWidth = parseInt(legend.attr('width'))
+  var legendX = parseInt(legend.attr('x'))
+  var legendY = parseInt(legend.attr('y'))
+
+
+  var label1 = svg.append('text')
+    .attr('class', 'legendlabel')
+    .text("Percentage of votes for Clinton")
+    .attr('x', legendX)
+    .attr('width', legendWidth)
+    .attr('y', legendY-20)
+    .style('weight', 'bold')
+    .style('text-align', 'center')
+    .style('font-size', '10px')
+
+  var label2 = svg.append('text')
+    .attr('class', 'legendlabel')
+    .text("0")
+    .attr('x', legendX)
+    .attr('y', legendY-5)
+    .style('weight', 'bold')
+    .style('font-size', '12px')
+
+  var label3 = svg.append('text')
+    .attr('class', 'legendlabel')
+    .text("100")
+    .attr('x', legendX+legendWidth-22.5)
+    .attr('y', legendY-5)
+    .style('weight', 'bold')
+    .style('font-size', '12px')
+
+  var label4 = svg.append('text')
+    .attr('class', 'legendlabel')
+    .text("Population Size")
+    .attr('x', legendX + legendWidth + 15)
+    .attr('y', legendY + (legendWidth / 2) - 38.4)
+    .style('weight', 'bold')
+    .style('font-size', '10px')
+    .attr('transform', function() {var newW = legendX + legendWidth+15 , newH = (legendY + (legendWidth / 2) - 38.4);
+                    return "rotate(90, " + newW + "," + newH + ")"});
+
+  var label5 = svg.append('text')
+    .attr('class', 'legendlabel')
+    .text("474768")
+    .attr('x', legendX + legendWidth)
+    .attr('y', legendY + 15)
+    .style('weight', 'bold')
+    .style('font-size', '12px')
+
+  var label6 = svg.append('text')
+    .attr('class', 'legendlabel')
+    .text("3716")
+    .attr('x', legendX + legendWidth)
+    .attr('y', legendY + legendWidth)
+    .style('weight', 'bold')
+    .style('font-size', '12px')
+
+}
+
 
 var districtColorMap = {
-  '1': "red",
-  '2': "green",
-  '3': "purple",
-  '4': "yellow",
+  '1': "#8dd3c7",
+  '2': "#ffffb3",
+  '3': "#bebada",
+  '4': "#fb8072",
   '5': "grey"
 };
 
@@ -247,6 +273,9 @@ function getFaded() {
 
 getFillColor = function(d) {
   if (colorByDistrict) {
+    legend.style('opacity',1)
+    legend2.style('opacity',.9)
+    createLegendLabels()
     aggByDistrict = $(aggDistricts)[0].checked;
     countyName = d.properties['NAME']
     countyDict = votingMap.get(countyName)
@@ -264,6 +293,9 @@ getFillColor = function(d) {
       return scale((countyDict["Dem"] / countyDict['Rep']), countyDict['ScaledPopulation']);
     }
   } else {
+    legend.style('opacity', 0)
+    legend2.style('opacity', 0)
+    svg.selectAll('.legendlabel').remove()
     var county = d.properties['NAME']
     cDict = votingMap.get(county)
     district = cDict['District']
