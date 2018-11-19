@@ -275,6 +275,7 @@ getFillColor = function(d) {
   if (colorByDistrict) {
     legend.style('opacity',1)
     legend2.style('opacity',.9)
+    svg.selectAll('.legendlabel').remove()
     createLegendLabels()
     aggByDistrict = $(aggDistricts)[0].checked;
     countyName = d.properties['NAME']
